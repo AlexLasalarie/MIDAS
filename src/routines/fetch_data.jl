@@ -28,8 +28,8 @@ longitude box.
 # Returns
 1. `XXXX.tenv3` time series at stations within the box in `tenv3` format
 2. `XXXX.step` known steps for a station within the box
-3. `stations_inbox.csv` (lat, lon, height) of stations within the box
-4. `stations_llh.txt` (lat, lon, height) of ALL stations (not just the ones in box)
+3. `network_llh.txt` (lat, lon, height) of ALL stations (not just the ones in box)
+4. `stations_llh.csv` (lat, lon, height) of stations within the box
 5. `stations_steps.txt` known steps for all stations (not just the ones in box)
 """
 function fetch_data(
@@ -48,7 +48,7 @@ function fetch_data(
         response = HTTP.get(url)
         data_string = String(response.body)
         lines = split(data_string, " \n")
-        path_llh = joinpath(path_dir, "stations_llh.txt")
+        path_llh = joinpath(path_dir, "network_llh.txt")
         open(path_llh, "w") do io
             for line in lines
                 if line != ""
@@ -93,7 +93,7 @@ function fetch_data(
     end
 
     # Write out to file
-    path_out = joinpath(path_dir, "stations_inbox.csv")
+    path_out = joinpath(path_dir, "stations_llh.csv")
     open(path_out, "w") do io
         hdr = "site, latitude, longitude, height"
         println(io, hdr)

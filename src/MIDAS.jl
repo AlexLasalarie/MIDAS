@@ -82,7 +82,7 @@ function auto_midas(
 )
     fetch_data(min_lat, max_lat, min_lon, max_lon, path_dir=path_dir, frame=frame)
     convert2tenv(t1, t2, path_dir=path_dir)
-    batch_midas(midas_bin, path_dir)
+    batch_midas(midas_bin, path_dir=path_dir)
     batch_tsplot(frame, path_dir=path_dir)
 end
 

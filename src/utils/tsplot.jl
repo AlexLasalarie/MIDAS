@@ -5,20 +5,24 @@ function tsplot(
     frame::String;
     fit::Symbol=:linear,
 )
-    # Parse data
-    tenv = read_tenv(path_tenv)
+    # Parse velocity data
     vel = read_vel(path_vel)
+    vels = [vel.e, vel.n, vel.u] .* 1000                # mm/year
+    errs = [vel.unc_e, vel.unc_n, vel.unc_u] .* 1000    # mm/year
+    offs = [vel.off_e, vel.off_n, vel.off_u] .* 1000    # mm
+    shift = -vels .* vel.tspan ./ 2                     # mm
+
+    # Parse tenv data
+    tenv = read_tenv(path_tenv)
     npts = length(tenv)
     t = Vector{Float64}(undef, npts)
     enu = Matrix{Float64}(undef, npts, 3)
     for (k, pt) in enumerate(tenv)
         t[k] = pt.decy
-        enu[k, 1] = (pt.e - vel.off_e) * 1000           # mm
-        enu[k, 2] = (pt.n - vel.off_n) * 1000           # mm
-        enu[k, 3] = (pt.u - vel.off_u) * 1000           # mm
+        enu[k, 1] = pt.e * 1000 - offs[1] + shift[1]    # mm
+        enu[k, 2] = pt.n * 1000 - offs[2] + shift[2]    # mm
+        enu[k, 3] = pt.u * 1000 - offs[3] + shift[3]    # mm
     end
-    vels = [vel.e, vel.n, vel.u] .* 1000                # mm/year
-    errs = [vel.sig_e, vel.sig_n, vel.sig_u] .* 1000    # mm/year
 
     # Plotting
     cm_to_px(cm) = round(Int, cm / 2.54 * 100)
@@ -31,6 +35,8 @@ function tsplot(
         p_i = scatter(
             t, y,
             markersize=2.5,
+            markerstrokewidth=0,
+            color=:darkblue,
             label=false,
             ylabel=ylabels[i],
             grid=false,
@@ -40,7 +46,7 @@ function tsplot(
         # Conditionally add the linear fit line if requested
         if fit === :linear
             xfit = t .- t[1]
-            yfit = vels[i] .* xfit
+            yfit = vels[i] .* xfit .+ shift[i]
             rate_str = "$(round(vels[i], digits=3)) ± $(round(errs[i], digits=3)) mm/yr"
             plot!(p_i, t, yfit, linewidth=1.5, label=rate_str, color=:red)
         end

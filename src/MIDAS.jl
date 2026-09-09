@@ -12,7 +12,6 @@ using Plots
 include("types.jl")
 
 # File I/O
-include("fileio/datestr2decy.jl")
 include("fileio/read_tenv3.jl")
 include("fileio/read_tenv.jl")
 include("fileio/read_vel.jl")
@@ -36,7 +35,7 @@ export auto_midas
 
 # ----- Orchestrator
 """
-    function auto_midas(
+    auto_midas(
         min_lat::Real,
         max_lat::Real,
         min_lon::Real,

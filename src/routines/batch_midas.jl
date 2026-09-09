@@ -1,5 +1,5 @@
 """
-    function batch_midas(
+    batch_midas(
         midas_bin::String;
         path_dir::String=".",
         path_llh::String="stations_llh.csv"
@@ -57,12 +57,14 @@ function batch_midas(
     path_out = joinpath(path_dir, "stations_vlm.csv")
     open(path_out, "w") do io
         list_vel = filter(endswith(".vel"), readdir(path_dir; join=true))
-        println(io, "station_id, latitude, longitude, height, vlm_mm_per_yr")
+        println(io, "station_id, latitude, longitude, height, t_start, t_end, vlm_mm_per_yr")
         for path_vel in list_vel
             vel = read_vel(path_vel)
             idx = findfirst(==(vel.site), sites)
             vlm = round(vel.u * 1000, digits=6)     # convert to mm/yr
-            println(io, "$(gps[idx].id), $(gps[idx].lat), $(gps[idx].lon), $(gps[idx].hgt), $(vlm)")
+            t1 = round(vel.t1, digits=4)
+            t2 = round(vel.t2, digits=4)
+            println(io, "$(gps[idx].id), $(gps[idx].lat), $(gps[idx].lon), $(gps[idx].hgt), $(t1), $(t2), $(vlm)")
         end
     end
 end

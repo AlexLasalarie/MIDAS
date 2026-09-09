@@ -117,6 +117,9 @@ function fetch_data(
         end
     end
 
+    # NOTE: the steps need to be ordered chronologically for MIDAS to work
+    sort!(steps, by=x -> x.date)
+
     # Create the individual step files
     for gps in stations_llh
         path_out = joinpath(path_dir, "$(gps.id).step")
@@ -124,7 +127,7 @@ function fetch_data(
             for step in steps
                 if step.site == gps.id
                     decy = round(step.decy, digits=4)
-                    println(io, "$(step.site)  $(decy)  $(step.date)  $(step.type)")
+                    println(io, "$(step.site) $(decy) $(step.date) $(step.type)")
                 end
             end
         end

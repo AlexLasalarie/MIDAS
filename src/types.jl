@@ -1,3 +1,18 @@
+function datestr2decy(
+    date_str::String,
+    format::String
+)
+    # Convert to Date format
+    df = DateFormat(format)
+    dt = Date(date_str, df)
+
+    # GIPSY convention: continuous days since 2000-01-01 over 365.25
+    epoch_2000 = Date(2000, 1, 1)
+    days_elapsed = Dates.value(dt - epoch_2000)
+    decy = 2000.0 + days_elapsed / 365.25
+    return decy
+end
+
 struct StationLLH
     id::String
     lat::Float64
@@ -28,11 +43,7 @@ struct Step
         type::Int
     )
         fulldate = "20" * date
-        dt = Date(fulldate, dateformat"yyyyuuudd")
-        yr = year(dt)
-        start_year = Date(yr, 1, 1)
-        next_year = Date(yr + 1, 1, 1)
-        decy = yr + Dates.value(dt - start_year) / Dates.value(next_year - start_year)
+        decy = datestr2decy(fulldate, "yyyyuuudd")
         new(site, decy, date, type)
     end
 end

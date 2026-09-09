@@ -7,8 +7,6 @@ surface deformation analysis. In a single workflow, you can:
 * Estimate robust linear surface deformation trends via the MIDAS algorithm
 * Generate plots of raw and fitted time series
 
----
-
 ## Installation and setup
 
 ### 1. Compile the MIDAS binary
@@ -41,8 +39,6 @@ You can now exit the REPL:
 julia> exit()
 ```
 
----
-
 ## Launch options
 
 ### Quick launch
@@ -67,8 +63,6 @@ Exit package mode by pressing Backspace and run:
 julia> using MIDAS
 ```
 
----
-
 ## Automated processing workflow
 For clean organization, navigate to your target working directory before running
 pipeline commands:
@@ -86,8 +80,6 @@ julia> auto_midas(min_lat, max_lat, min_lon, max_lon, t1, t2, midas_bin)
 * `min_lat`, `max_lat`, `min_lon`, `max_lon`: bounding box coordinates of AOI
 * `t1`, `t2`: start and end dates formatted as "yyyymmdd" strings (e.g., "20010101")
 * `midas_bin`: absolute path to your compiled MIDAS binary file
-
----
 
 ## Modular pipeline steps
 If you prefer running the analysis step-by-step:

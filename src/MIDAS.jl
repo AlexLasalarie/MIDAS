@@ -5,26 +5,34 @@ using HTTP
 using Dates
 using Printf
 using Plots
+using Statistics
 
 # ----- Internal dependencies
 
 # Types
 include("types.jl")
 
-# File I/O
+# GPS ile I/O
 include("fileio/read_tenv3.jl")
 include("fileio/read_tenv.jl")
 include("fileio/read_vel.jl")
 include("fileio/write_tenv.jl")
 
+# InSAR file I/O
+include("fileio/read_unw_igram.jl")
+include("fileio/read_los_grid.jl")
+include("fileio/read_rsc.jl")
+
 # Utilities
 include("utils/tsplot.jl")
+include("utils/plot_insar_vs_gps.jl")
 
 # Routines
 include("routines/fetch_data.jl")
 include("routines/convert2tenv.jl")
 include("routines/batch_midas.jl")
 include("routines/batch_tsplot.jl")
+include("routines/compare_rates.jl")
 
 # ----- Exports
 export fetch_data
@@ -32,6 +40,7 @@ export convert2tenv
 export batch_midas
 export batch_tsplot
 export auto_midas
+export compare_rates
 
 # ----- Orchestrator
 """
@@ -79,9 +88,9 @@ function auto_midas(
     path_dir::String=".",
     frame::String="NA"
 )
-    fetch_data(min_lat, max_lat, min_lon, max_lon, path_dir=path_dir, frame=frame)
+    path_llh = fetch_data(min_lat, max_lat, min_lon, max_lon, path_dir=path_dir, frame=frame)
     convert2tenv(t1, t2, path_dir=path_dir)
-    batch_midas(midas_bin, path_dir=path_dir)
+    batch_midas(midas_bin, path_dir=path_dir, path_llh=path_llh)
     batch_tsplot(frame, path_dir=path_dir)
 end
 

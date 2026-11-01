@@ -93,8 +93,8 @@ function fetch_data(
     end
 
     # Write out to file
-    path_out = joinpath(path_dir, "stations_llh.csv")
-    open(path_out, "w") do io
+    path_llh = joinpath(path_dir, "stations_llh.csv")
+    open(path_llh, "w") do io
         hdr = "site, latitude, longitude, height"
         println(io, hdr)
         for gps in stations_llh
@@ -159,4 +159,5 @@ function fetch_data(
             end
         end
     end
+    return path_llh
 end

@@ -93,3 +93,29 @@ struct VelData
     sig_u::Float64
     nstep::Int
 end
+
+struct StationVel
+    site::String
+    lat::Float64
+    lon::Float64
+    hgt::Float64
+    t1::Float64
+    t2::Float64
+    vel_e::Float64
+    vel_n::Float64
+    vel_u::Float64
+end
+
+struct Rsc
+    width::Int64
+    length::Int64
+    x_first::Float64
+    y_first::Float64
+    x_step::Float64
+    y_step::Float64
+    x_unit::String
+    y_unit::String
+    z_offset::Int64
+    z_scale::Int64
+    projection::String
+end

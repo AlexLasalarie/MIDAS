@@ -18,6 +18,7 @@ Run the MIDAS algorithm to derive surface deformation rates.
 # Returns
 - `.vel` files containing the information on linear rates
 - `.renv` files containing the detrended time series in a `tenv` format
+- `stations_rates.csv`: file containing the ENU rates of all stations
 """
 function batch_midas(
     midas_bin::String;
@@ -54,17 +55,19 @@ function batch_midas(
     end
 
     # Reads the solution and outputs to summary file
-    path_out = joinpath(path_dir, "stations_vlm.csv")
+    path_out = joinpath(path_dir, "stations_rates.csv")
     open(path_out, "w") do io
         list_vel = filter(endswith(".vel"), readdir(path_dir; join=true))
-        println(io, "station_id, latitude, longitude, height, t_start, t_end, vlm_mm_per_yr")
+        println(io, "station_id, latitude, longitude, height, t_start, t_end, east_mm_per_yr, north_mm_per_yr, up_mm_per_year")
         for path_vel in list_vel
             vel = read_vel(path_vel)
             idx = findfirst(==(vel.site), sites)
-            vlm = round(vel.u * 1000, digits=6)     # convert to mm/yr
+            e = round(vel.e * 1000, digits=6)
+            n = round(vel.n * 1000, digits=6)
+            u = round(vel.u * 1000, digits=6)
             t1 = round(vel.t1, digits=4)
             t2 = round(vel.t2, digits=4)
-            println(io, "$(gps[idx].id), $(gps[idx].lat), $(gps[idx].lon), $(gps[idx].hgt), $(t1), $(t2), $(vlm)")
+            println(io, "$(gps[idx].id), $(gps[idx].lat), $(gps[idx].lon), $(gps[idx].hgt), $(t1), $(t2), $(e), $(n), $(u)")
         end
     end
 end

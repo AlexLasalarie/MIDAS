@@ -2,7 +2,7 @@
 
 julia_version = "1.12.5"
 manifest_format = "2.0"
-project_hash = "8b22498bb360a2f7469faaedd6ae66c829fce07f"
+project_hash = "6478148006f329fd1905c3c71e430b559da5e4d4"
 
 [[deps.AliasTables]]
 deps = ["PtrArrays", "Random"]
@@ -421,7 +421,7 @@ uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 version = "1.11.0"
 
 [[deps.MIDAS]]
-deps = ["Dates", "HTTP", "Printf"]
+deps = ["Dates", "HTTP", "Plots", "Printf"]
 path = "."
 uuid = "cabf4bbb-35d6-49e8-92c2-07d7f046734b"
 version = "0.1.0"
